@@ -10,6 +10,7 @@ compatible = {
     "-": ["+", "-"],
     "/": [],
     "*": ["*"],
+    "**": ["+","-"]
 }
 
 
@@ -63,9 +64,13 @@ def _get_options(length, current_equation):
     if previous_char in equals and len(current_equation) < length - 1:
         # We have at least 2 more spots left, and previous char is an equal sign
         options += ["+", "-"]
-    if previous_chars == "**" and "*" in options:
-        # If most two recent characters are **, remove * from the options, since we don't want ***
-        options.remove("*")
+    if previous_chars == "**":
+    	if "*" in options:
+	        # If most two recent characters are **, remove * from the options, since we don't want ***
+    	    options.remove("*")
+    	if len(current_equation) < length - 1:
+    		# Allow positive or negative exponents ex: 1**+1=1
+	    	options += compatible[previous_chars]
     return options
 
 
